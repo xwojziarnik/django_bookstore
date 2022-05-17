@@ -3,8 +3,10 @@ from django.shortcuts import render
 
 # Create your views here.
 
+
 def index(request):
     return HttpResponse("Hello! You are at the books index page.")
+
 
 def book_search(request):
     search_text = request.GET.get("search", "")
