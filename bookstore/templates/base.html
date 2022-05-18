@@ -6,6 +6,11 @@
 </head>
 <body>
 {% block content %}
+    <ul>
+    {% for book in books %}
+        <li>{{ book }}</li>
+    {% endfor %}
+    </ul>
 {% endblock %}
 </body>
 </html>
