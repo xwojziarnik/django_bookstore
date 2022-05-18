@@ -5,7 +5,6 @@ from requests import RequestException, Response
 from .models import Book, Author
 
 
-
 def get_books_from_google_api(query_arg: str = "hobbit") -> List[Book]:
     for i in range(0, _generate_total_items_number(), 40):
         queries = {"q": query_arg, "startIndex": str(i), "maxResults": "10"}
@@ -29,12 +28,13 @@ def get_books_from_google_api(query_arg: str = "hobbit") -> List[Book]:
 
 def _build_book_from_item(item: Dict[str, Any]) -> Book:
     book_info: Dict[str, Any] = item["volumeInfo"]
-    authors: List[Author] = [Author.objects.update_or_create(first_name=" ".join(author.split()[:-1]), last_name=author.split()[-1])[0] for author in book_info.get("authors", [])]
+    authors: List[Author] = [Author.objects.update_or_create(first_name=" ".join(author.split()[:-1]),
+                                                             last_name=author.split()[-1])[0] for author in book_info.get("authors", [])]
     book = Book.objects.update_or_create(
-        title = book_info.get("title"),
-        acquired= False,
-        publication_date = parse_date(book_info.get("publishedDate", "")),
-        thumbnail = book_info["imageLinks"]["thumbnail"] if book_info.get("imageLinks") else "",
+        title=book_info.get("title"),
+        acquired=False,
+        publication_date=parse_date(book_info.get("publishedDate", "")),
+        thumbnail=book_info["imageLinks"]["thumbnail"] if book_info.get("imageLinks") else "",
     )[0]
     print(book)
     book.authors.set([author.id for author in authors])

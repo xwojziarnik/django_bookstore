@@ -7,7 +7,7 @@ class Book(models.Model):
     title = models.CharField(max_length=100, help_text="Title of the book")
     authors = models.ManyToManyField('Author', through="books.BookAuthor")
     acquired = models.BooleanField(default=False, verbose_name="Status of the book: acquired?")
-    publication_date = models.DateField(verbose_name="Publication date of the book.", null=True , blank=True)
+    publication_date = models.DateField(verbose_name="Publication date of the book.", null=True, blank=True)
     thumbnail = models.URLField(blank=True, verbose_name="URL to thumbnail of the book")
 
     def __str__(self):
