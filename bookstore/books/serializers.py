@@ -30,8 +30,8 @@ class BookSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         author_data = validated_data.pop('authors')
-        book_author_id_pool = [bk.author_id for bk in BookAuthor.objects.filter(book_id=instance.id)]
-        print(book_author_id_pool)
+        author_ids_in_book_author_based_on_instance = [bk.author_id for bk in
+                                                       BookAuthor.objects.filter(book_id=instance.id)]
 
         for author in author_data:
             if not instance.authors.filter(
@@ -43,10 +43,10 @@ class BookSerializer(serializers.ModelSerializer):
                     instance.authors.add(Author.objects.get(
                         Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])))
 
-        for i in book_author_id_pool:
-            if i not in [Author.objects.get(
+        for i in author_ids_in_book_author_based_on_instance:
+            if not i in [Author.objects.get(
                     Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])).id for e in
                          author_data]:
-                BookAuthor.objects.get(author_id=i).delete()
+                BookAuthor.objects.get(Q(author_id=i) and Q(book_id=instance.id)).delete()
 
         return super().update(instance, validated_data)

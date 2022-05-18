@@ -13,9 +13,9 @@ It needs to allow for some basic operations, such as:
 
 ##### Tech stack:
 
-- Python 3.10.2
+- Python 3
 - Virtualenv
-- Django 4.0.4
+- Django
 - Django Rest Framework
 - Heroku
 
@@ -45,5 +45,5 @@ It needs to allow for some basic operations, such as:
 
 `python3 manage.py runserver`
 
-Thank you for watching this repo. 
-Find me on [LinkedIn](https://www.linkedin.com/in/wojciech-ziarnik-23ba971a1/),
+Thank you for watching this repository. I would be glad if you give me some feedback. 
+Find me on [LinkedIn](https://www.linkedin.com/in/wojciech-ziarnik-23ba971a1/)
