@@ -23,21 +23,22 @@ def get_books_from_google_api(query_arg: str = "hobbit") -> List[Book]:
                     books.append(_build_book_from_item(item))
             else:
                 print(f"Request of {google_response.url} has status {google_response.status_code}")
-    return books
+    return books    # type: ignore
 
 
 def _build_book_from_item(item: Dict[str, Any]) -> Book:
     book_info: Dict[str, Any] = item["volumeInfo"]
-    authors: List[Author] = [Author.objects.update_or_create(first_name=" ".join(author.split()[:-1]),
-                                                             last_name=author.split()[-1])[0] for author in book_info.get("authors", [])]
-    book = Book.objects.update_or_create(
+    authors: List[Author] = [Author.objects.update_or_create(   # type: ignore
+        first_name=" ".join(author.split()[:-1]),
+        last_name=author.split()[-1])[0] for author in book_info.get("authors", [])]
+    book = Book.objects.update_or_create(   # type: ignore
         title=book_info.get("title"),
         acquired=False,
         publication_date=parse_date(book_info.get("publishedDate", "")),
         thumbnail=book_info["imageLinks"]["thumbnail"] if book_info.get("imageLinks") else "",
     )[0]
     print(book)
-    book.authors.set([author.id for author in authors])
+    book.authors.set([author.id for author in authors])     # type: ignore
     return book
 
 

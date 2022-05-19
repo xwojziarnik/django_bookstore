@@ -1,9 +1,14 @@
+from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from .serializers import BookSerializer
 from .models import Book
 
 # Create your views here.
+
+
+def index_page(request):
+    return render(request, template_name='base.html')
 
 
 class BookListAPIView(generics.ListCreateAPIView):
@@ -30,6 +35,4 @@ class BooksQuerying(generics.ListCreateAPIView):
     filterset_fields = ['id', 'title', 'authors', 'acquired', 'publication_date', 'thumbnail']
 
     def get_queryset(self):
-        return Book.objects.filter()
-
-# class ImportBooks(generics.Li)
+        return Book.objects.filter()    # type: ignore

@@ -19,34 +19,34 @@ class BookSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         author_data = validated_data.pop('authors')
 
-        book_instance = Book.objects.create(**validated_data)
+        book_instance = Book.objects.create(**validated_data)   # type: ignore
 
         for author in author_data:
-            if not Author.objects.filter(Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])):
+            if not Author.objects.filter(Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])):    # type: ignore
                 book_instance.authors.create(first_name=author['first_name'], last_name=author['last_name'])
             else:
-                book_instance.authors.add(Author.objects.get(Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])))
+                book_instance.authors.add(Author.objects.get(Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])))    # type: ignore
         return book_instance
 
     def update(self, instance, validated_data):
         author_data = validated_data.pop('authors')
         author_ids_in_book_author_based_on_instance = [bk.author_id for bk in
-                                                       BookAuthor.objects.filter(book_id=instance.id)]
+                                                       BookAuthor.objects.filter(book_id=instance.id)]  # type: ignore
 
         for author in author_data:
             if not instance.authors.filter(
                     Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])).exists():
-                if Author.objects.filter(
+                if Author.objects.filter(   # type: ignore
                         Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])):
                     instance.authors.create(first_name=author['first_name'], last_name=author['last_name'])
                 else:
-                    instance.authors.add(Author.objects.get(
+                    instance.authors.add(Author.objects.get(    # type: ignore
                         Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])))
 
         for i in author_ids_in_book_author_based_on_instance:
-            if not i in [Author.objects.get(
+            if not i in [Author.objects.get(    # type: ignore
                     Q(first_name__iexact=author['first_name']) | Q(last_name__iexact=author['last_name'])).id for e in
                          author_data]:
-                BookAuthor.objects.get(Q(author_id=i) and Q(book_id=instance.id)).delete()
+                BookAuthor.objects.get(Q(author_id=i) and Q(book_id=instance.id)).delete()  # type: ignore
 
         return super().update(instance, validated_data)
