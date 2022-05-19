@@ -1,1 +1,0 @@
-web: gunicorn bookstore.wsgi
